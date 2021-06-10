@@ -1,0 +1,444 @@
+\documentclass[a4paper, 12pt, notitlepage]{report}
+
+\usepackage{amsfonts} % if you want blackboard bold symbols e.g. for real numbers
+\usepackage{graphicx} % if you want to include jpeg or pdf pictures
+\usepackage{amsmath,amssymb}
+\usepackage{algorithmic}
+\usepackage{cite}
+\usepackage{textcomp}
+
+\title{Summary of Workflow at Ikore \\ (Lidiski Project)} % change this
+%\subtitle{Lidiski Project}
+\author{Ese OVIE} % change this
+\date{\today} % change this
+
+\begin{document}
+
+%%%%%%%%%% PRELIMINARY MATERIAL %%%%%%%%%%
+\maketitle
+%\begin{center}
+%A project of 20 credit points at level 4. % change this
+%\\[12pt]
+%Supervised by Dr.\ Arne Kovac. % change this
+%\end{center}
+\thispagestyle{empty}
+\newpage
+\section*{Acknowledgement of Sources} % this must be included in undergradate projects
+%For all ideas taken from other sources (books, articles, internet), the source of the ideas is mentioned in the main text and fully referenced at the end of the report.
+%
+%All material which is quoted essentially word-for-word from other sources is given in quotation marks and referenced.
+%
+%Pictures and diagrams copied from the internet or other sources are labelled with a reference to the web page or book, article etc.
+%
+%All typos are unfortunately not my problem to deal with...until I have had my cup of coffee and Habib Yorghurt
+%\\[12pt]
+%Signed \dotfill Date \dotfill
+
+\tableofcontents 
+
+%%%%%%%%%% MAIN TEXT STARTS HERE %%%%%%%%%%
+
+%%%%%%%%%% SAMPLE CHAPTER %%%%%%%%%%
+\chapter{May, 2021}
+%
+%Started at Ikore on the 3rd of May, 2021. Begun with Onboarding sessions with members of staff. Here is a summary of activities so far. 
+%
+%
+%\section{Week one}
+%\subsection{Day one}
+%%
+%
+%Was introduced by Adeolu to the Core Ikore team consisting of Constance, Nkechi, Mercy, Bolanle, Peter etc.\\
+%
+%Constance started with the orientation sessions and organizational rules and regs\\
+%
+%Mercy worked me through the Logistic aspects of the company\\
+%
+%Adeolu gave me a more detailed walk through of the Lidiski project, its partners and associates. He touched on the relationaship structure between the various partners on the project \\
+%
+%
+%
+%\subsection{Day two}
+%%
+%Continued my onboarding sessions with Peter of the IT department who ran me through the work processes of his department with respect to the Lidiski project\\
+%
+%10:30, another meeting held virtually with Godson, Jesutomi, Peter and Ovo\\
+%
+%Continued working on my ImGui task\\
+%
+%I also filled the relevant employee forms gibven to me by Nkechi\\
+%
+%\subsection{Day three}
+%%
+%Scheduled meeting with Raphael started at 12:30pm and had in attendance Gauthier Quesnel from hte Irritator project\\
+%Talking points included
+%\begin{itemize}
+%\item
+%The job description of the software engineer for the Lidiski project
+%\item
+%Demonstration of the Irritator modeling tool by Gauthier with explanation about its potential and strenghts
+%\item
+%The use cases of this software were highlighted to include mixed modeling of continuous and discrete phenomena. The ability to quickly prototype and run simulation without having to write code lines. The ability to employ this tool in participatory modeling scenario. being able to build micro or small units of systems that can be scalled up later. Accuracy issues with the software were also highlighted with regards the internal solver (integrators mainly). two integrator types were mentioned vis-a-vis QSS1 and QSS2.
+%\item
+%I was tasked with a understanding the platform and various tools linked with it. these tools include computer specification, software, documents or bibliography etc.
+%\item
+%I was tasked with undertsanding the underlying e Discrete EVent Specification system (DEVS) formalism by getting a book by B.P. Ziegler and studying it for detailed information
+%\item
+%My first assignment was to use this tool in modeling the Susceptible-Exposed-Infectious-Recovered (SEIR) model of infectious diseases.
+%\item
+%on this task, I am supposed to liase closely with Gauthier and inform Raphael also on my progress
+%\item
+%I informed them I already had the irritator source files cloned from Github but I cant work withthem at the moment because of software issues regarding  Microsoft visual studio 2019 that is required.
+%\end{itemize}
+
+\subsection{Day Four}
+%
+Starting work with literature for DEVS\\
+
+Mem si il y a plusieurs version de l\'equation SEIR, le premiere modele SEIR choissit  c'est prendre apartir de Nakul Chitnis, 2017\\
+\begin{eqnarray}
+\label{eqn:seirmdl}
+\frac{dS}{dt}=\Lambda -r\beta \frac{SI}{N}-\mu S\\
+\frac{dE}{dt}= r\beta \frac{SI}{N}-\epsilon E\\
+\frac{dI}{dt}=\epsilon E-\gamma I -\mu I\\
+\frac{dR}{dt}=\gamma I- \mu R
+\end{eqnarray}
+with $N=S+E+I+R$ and a state space that contains $x={S,E,I,R}\equiv{x_1,x_2,x_3,x_4}$. Which when the equation is rewritten in terms of the new state space variable, we have:
+\begin{eqnarray}
+\label{eqn:seirmdl}
+\frac{dx_1}{dt}=\Lambda-r\beta \frac{x_1x_3}{N}-\mu x_1\\
+\frac{dx_2}{dt}= r\beta \frac{x_1x_3}{N}-\epsilon x_2\\
+\frac{dx_3}{dt}=\epsilon x_2-\gamma x_3 -\mu x_3 \equiv \epsilon x_2-(\gamma +\mu) x_3 \\
+\frac{dx_4}{dt}=\gamma x_3- \mu x_4
+\end{eqnarray}
+Characteristics of this model:
+\begin{enumerate}
+\item
+Model is a logical progression of disease from\textellipsis susceptibility (S), exposure (E), infection (I), recovery (R)
+\item
+System is nonlinear in the variables S and I. These variable which are the states $x_1$ and $x_3$ are coupled. Thye simulation results will have to show these results
+\item
+Autres
+\end{enumerate}
+Parameters for this model are the following
+\begin{table}[h!]
+  \begin{center}
+    \caption{Table of parameters.}
+    \label{tab:table1}
+    \begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      \textbf{Parameter} & \textbf{Description} & \textbf{Value}\\
+     % $\alpha$ & $\beta$ & $\gamma$ \\
+      \hline
+      r & Number of contacts per unit time & a\\
+      $\beta$ & Probability of transmission per contact & b\\
+       $r\beta$ &  & 0.3\\
+      N & Total population size & 1000\\
+      $\Lambda$ & Constant recruitment rate & 16.667\\
+      $\mu$ & Per-capita removal rate & 0.01667\\
+      $\gamma$ & Per-capita recovery rate & 0.1\\ 
+      $\epsilon$ & Per-capita rate of progression to infectious state & $<<1$ \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+However the linearized model has been obtained via Jacobian method with equilibrium point set as zero. The resulting state space is as follows
+\begin{equation}
+\frac{df_x}{dt}=
+\begin{bmatrix}
+-\mu & 0 & 0 & 0 \\
+0 & -\epsilon & 0 & 0 \\
+0 & \epsilon & -(\gamma + \mu) & 0 \\
+0 & 0 & \gamma & - \mu 
+\end{bmatrix}
+\begin{matrix}
+x_1 \\
+x_2\\
+x_3\\
+x_4
+\end{matrix}
+\end{equation}
+
+\section{Week Two}
+\subsection{Monday, 10th may, 2021}
+Audjourd'hui, je commence par lancement de Irritator a partir de ``cmd prompt''.
+
+Une fois l'ecran irritator ete ourvrir
+
+J'apellee une example parmi d'examples dedan le logiciel c.a.d. l'example de Lotka Voltera avec l'integreteur qss1 qui semble comme je le montre ci en bas
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{lotka_volterra_mdl.png}}
+\caption{L'example de Lotka-Volterra.}
+\label{fig}
+\end{figure}
+
+Les questions qui j'ai voudrais poser sont le suivant:\\
+
+\begin{enumerate}
+\item
+Apres avoir ouvrir une model dans la liste d'example c.a.d. qss1-lotka-volterra, comment executer cette modele pour avoir une vue du graph/plot
+\item
+Comment fait le connection entre le sortie et l'entre du deux bloques dans la model . Par example entre l'integrateur \''qss1integrator\'' et le multiplicateur \''qss1multiplier\''.
+\item
+Finalement pour l'instante, qu'est ce la difference entre \''qss1sum\'' et \''qss1wsum\''
+\end{enumerate}
+
+maintenant je l'ecran montre ci-dessous sans idee pour faire le lien entre le bloques ( une manual pour le mode d'emploi ou le mode d'utilisation d'irritator peux rendre ca plus facile plus facile)
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{seir_mdl.png}}
+\caption{L'example SEIR.}
+\label{fig}
+\end{figure}
+
+\section{Week Three (Semaine Trois)}
+\subsection{Monday, 17th May, 2021}
+
+Cette semaine commencee avec simulation sur Irritator du modele SEIR. J'ai deaux modele c.a.d. le modele nonlineaire et le modele lineaire.
+
+L'etapes suivre sont les suivant: 
+
+\begin{enumerate}
+\item
+Etablisement du modele lineaire (equation ()) apartir du modele nonlineaire (linearisation Jacobian)
+
+\item
+Sassiez le parametres du modele et fait l'execution pour regardez les courbes
+
+\item
+Faire la meme chose avec le modele Nonlineaire dans equation ()
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{seir_linear.png}}
+\caption{SEIR linear model on Irritator.}
+\label{fig}
+\end{figure}
+
+The linear model of thr SEIR contains ten blocks in allas seen in the Figure ()
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{plot_linear.png}}
+\caption{SEIR linear Plot.}
+\label{fig}
+\end{figure}
+
+The plot of the linear system states output shows a convergence of all states given the initial values selected. ALl states settle down to asymptotic regime as time goes to $\infty$
+
+
+PS:\\
+Une petite observation paraport le modele SEIR choissit. Il n'y a pas d'entree dans la modele. Plutot je dois prendre en conte l'entree pour la systeme
+
+\subsection{Thursday, 20th May, 2021}
+Since I am having challenges getting the nonlinear models to run( for reasons for which I am not clear right now), I have decided to work with a separate model to confirm the issues I am having. I will repeat the model for the linear and nonlinear versions to see if the results are all displayed on plot. This new model has the structure (Singh et al., 2017):
+\begin{eqnarray}
+\label{eqn:seirmdl}
+\frac{dS}{dt}=-\alpha S(E+I) + aE + bI + cR\\
+\frac{dE}{dt}= \alpha S(E+I) - aE - \beta E\\
+\frac{dI}{dt}=\beta E - \gamma I - bI\\
+\frac{dR}{dt}=\gamma I - c R
+\end{eqnarray}
+with an associated state space form
+\begin{eqnarray}
+\label{eqn:seirmdl}
+\frac{dx_1}{dt}=-\alpha x_1(x_2+x_3) + ax_2 + bx_3 + cx_4\\
+\frac{dx_2}{dt}= \alpha x_1(x_2+x_3) - ax_2 - \beta x_2\\
+\frac{dx_3}{dt}=\beta x_2 - \gamma x_3 - bx_3\\
+\frac{dx_4}{dt}=\gamma x_3 - c x_4
+\end{eqnarray}
+The working parameters are the following
+\begin{table}[h!]
+  \begin{center}
+    \caption{Table of parameters.}
+    \label{tab:table1}
+    \begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      \textbf{Parameter} & \textbf{Description} & \textbf{Value}\\
+     % $\alpha$ & $\beta$ & $\gamma$ \\
+      \hline
+      $\alpha$ &  rate of pathogen transmission & 0.5\\
+      $\beta$ & reciprocal of intrinsic incubation period & 0.53\\
+       a & rate at which exposed humans become suspectible & 0.06\\
+      b & rate at which infected human becomes suspectible & 0.05\\
+      c & probability becoming again suspectible after recovery & 0.35\\
+      $\gamma$ & Per-capita recovery rate & 0.1\\ 
+      $S(0)$ &  & 0.08\\ 
+      $E(0)$ &  & 0.07\\
+      $I(0)$ &  & 0.05\\
+      $R(0)$ &  & 0.01\\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+%\begin{table}[h]
+%\caption{Table of parameters} %title of the table
+%\centering % centering table
+%\begin{tabular}{c rrrrrrr} % creating eight columns
+%\hline\hline %inserting double-line
+%Audio Name&\multicolumn{7}{c}{Sum of Extracted Bits} \\ [0.5ex]
+%\hline % inserts single-line
+%Police & 5 & -1 & 5& 5& -7& -5& 3\\ % Entering row contents
+%Midnight & 7 & -3 & 5& 3& -1& -3& 5\\
+%News & 9 & -3 & 7& 9& -5& -1& 9\\[1ex] % [1ex] adds vertical space
+%\hline % inserts single-line
+%\end{tabular}
+%\label{tab:hresult}
+%\end{table}
+
+
+\section{Week four}
+The nonlinear models are all working. the issue seemed to be the sum block of irritator always requiring that I provide initial values before simulation start
+
+\subsection{Monday 24th May, 2021}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{seir_nonlinear.png}}
+\caption{SEIR Nonlinear model on Irritator.}
+\label{fig}
+\end{figure}
+
+The nonlinear model of the SEIR has twenty seven blocks. The number of blocks increasing by reason of the system complexity in nonlinear configuration.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{plot_nonlinear.png}}
+\caption{SEIR Nonlinear Plot.}
+\label{fig}
+\end{figure}
+
+the output from the nonlinear system model has been plotted and the results show that the states are also converging asymptotically however slower than the linear SEIR model.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.50]{plot_nonlinearv2.png}}
+\caption{Second SEIR Nonlinear Plot.}
+\label{fig}
+\end{figure}
+
+\subsection{Friday 28th May, 2021}
+ Submitted the work done on the irritator simulator t Gauthier and Raphael. Awaiting feedback. 
+ 
+ \section{Week five}
+ Tasking by Gauthier to add the developed SEIR models into the irritator simulator. The model definition was t go into the example.hpp header file and the links from the examples dropdown menu goes into the node-editor.cpp file.\\
+ 
+ After comleteing this task, I had to create a pull request on github. This gave me some challenges.\\
+ 
+ Dr Joseph requested for means to implement ponline questionnaire. I started looking at USSD implementations on Wednedday of week five and lasted through to friday.\\
+ 
+  \section{Week Six}
+  \subsection{Monday 7th June, 2021}
+  Created the pull request for the modifications made to irritator and Gauthier made comments, requesting corrections to my submission\\
+    \subsection{Tuesday 8th June, 2021}
+  Had a meeting with Raphael and Gauthier\\
+  
+  \subsection{Wednesday 9th June, 2021}
+  I had some issues with my Laptop. Had to do a recovery on my Windows 10 OS.
+  
+    \subsection{Thursdayy 10th June, 2021}
+    Started implementing corrections on update to SEIR model added to simulator. Also i have updated this report document to show the parameters values used in the simulation as requested by Gauthier
+ 
+ 
+ \section{Appendix and General discussion of work}
+ The principal idea which the irritator simulator uses is taken from DEVS formalism. DEVS (or discrete event systems specification), is a meta language of some sort for describing dynamic phenomena using its own linguistics and \\
+ 
+The distinctive trend 
+of computational science is the continual trend toward greater 
+abstraction and identification of the true underlying 
+commonalities and distinctions between apparently different 
+phenomena. This trend is realized in the evolution of 
+concepts relating to event-oriented simulation that transpired 
+since its inception and which forms the core of the historical 
+perspective on discrete event simulation that we present here (From Discrete Event Simulation to Discrete Event Specified Systems (DEVS)
+Bernard P. Zeigler  and Alexander Muzy, 2017). Other similar efforts at seeking such underlying commonalities include Bond graph and OPM.\\
+
+Theory of Modeling and Simulation (1976) defined the 
+Discrete Event System Specification (DEVS) formalism as a 
+specification for a subclass of Wymore systems that could 
+capture all the relevant features of the models underlying 
+event-oriented simulations; In contrast, Discrete Time 
+Systems Specification (DTSS) and Differential Equation 
+System Specification (DESS) specify distinct subclasses of 
+Wymore systems\\
+
+Also look at Moore, Mealy and Markov formalisms. add to this Monte Carlo\\
+
+According to Hollocks (2008), 
+Tocher’s core idea was of a system consisting of individual 
+components, or ‘machines’, progressing as time unfolds 
+through ‘states’ that change only at discrete ‘events’. Indeed, 
+DEVS took this idea one step further using the set theory of 
+logicians and mathematicians [(Whitehead and Russel, 1910), 
+Bourbaki (1930) and its use by Wymore (1967)\\
+
+Discrete event systems specification can somewhat be considered to be descriptive of queueing theory or queue systems.\\
+
+For what Raphae was describing earlier today about the surveillance and control asppects of the LZidistki project, the following description can be made about the system
+
+Surveillance and control model is the global non-modular piece pf the system that holds all other modular atomic pieces togather
+
+For the lidiski project for example 
+
+Disease Surveillance and control \\
+===============================\\
+Various disease models e.g. \\
+SEIR\\
+PPR\\
+Newcastle diseaese\\
+
+each of these modules have their interactions by inputs,states ad outputs\\
+
+each of these modules can be viewed as single blocks...grey,white or black boxes where only input and output is availabe for interaction within the system\\
+
+estimators or observers can be used to sample(echantillionage) the detectable states to aid...state deduction, prediction, estimation for computation\\
+
+Raphael speaks about being able to separate the model from the simulation or simulator means that the abstarct idea which suffieciently describes a physical  phenomena be separate from the tool used to investugate it. \\
+
+\subsection{DEVS Formalism}
+This is a formalism consistsing of:\\
+Inputs\\
+States (usually with initial state specified)\\
+Outputs\\
+Time advance function\\
+
+
+
+
+%\subsection{Examples of implicit in-text citations}
+%%
+%The sum of convex functions is itself convex (Blacke, 1985) and therefore any minimiser of this objective function will be a global minimiser (Greene and Whit, 1995, p.123). It is possible to exploit this fact (Browne et al., 2005) to enhance the optimisation algorithm.
+%
+%\subsection{Examples of explicit in-text citations}
+%%
+%Blacke (1985) first proved that a sum of convex functions is convex. Any minimiser of this objective function will be a global minimiser, a fact shown by Greene and Whit (1995, p.123) and exploited by Browne et al.\ (2005) to enhance the optimisation algorithm.
+%
+%%%%%%%%%%% APPENDIX %%%%%%%%%%
+%\appendix
+%\chapter{An Appendix may not be necessary}
+%%
+%Text introducing the/this appendix.
+%
+%\section{Appendix section}
+%%
+%Text of this section.
+%
+%Subsections and further divisions can also be used in appendices.
+%
+%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%
+\chapter*{Bibliography}
+%
+\begin{description}
+\item Nakul, C. (2017). \emph{Introduction to SEIR Models}, Workshop on Mathematical Models of Climate Variability, Environmental Change and Infectious Diseases Trieste, Italy
+
+\item Singh, S., Srivastava, S.K. and Arora, U. (2017). `Stability of SEIR Model of Infectious Diseases
+with Human Immunity', \emph{Global Journal of Pure and Applied Mathematics}, \textbf{13-6}, pp.1811--19
+
+%\item Author, I. (Year). \emph{Book Title}, Publisher; Place of publication.
+
+%\item Lamport, L. (1986), \emph{\LaTeX: A Document Preparation System}, Addison-Wesley; Reading, MA.
+
+%\item Author, I. (Year). `Journal article title', \emph{Journal}, \textbf{Vol}, pp.first--last.
+
+%\item Smith, A.D.A.C. and Wand, M.P. (2008). `Streamlined variance calculations for semiparametric
+%mixed models', \emph{Statistics in Medicine}, \textbf{27}, pp.435--48.
+
+\end{description}
+
+\end{document}
